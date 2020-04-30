@@ -9,8 +9,8 @@ public class Movie {
     HashSet<Genero> generos=new HashSet<>();
     String dataLancamento;
     int orcamento;
-    int duracao;
-    int mediaVotos;
+    float duracao;
+    float mediaVotos;
     int numeroVotos;
 
     public Movie(int id, String titulo, Actor actor, Realizador realizador, Genero genero, String data) {
@@ -23,7 +23,7 @@ public class Movie {
     }
 
     public Movie(int id, String titulo, Actor actor, Realizador realizador, Genero genero,
-                  String data, int orcamento,int duracao, int mediaVotos, int numeroVotos) {
+                  String data, int orcamento,float duracao, float mediaVotos, int numeroVotos) {
         this.id = id;
         this.titulo = titulo;
         this.actores.add(actor);
@@ -42,9 +42,17 @@ public class Movie {
     }
 
     public String arrumaData(String data){
-        if (validaData(data)){
-            String[] dataArray = data.split("-",3);
-            return (dataArray.length == 3) ? dataArray[2]+"-"+dataArray[1]+"-"+dataArray[0]: "0000-00-00";
+
+        String[] dataArray = data.split("-",3);
+        if (dataArray.length == 3){
+
+            if (dataArray[0].length() == 2 && dataArray[1].length() == 2 && dataArray[2].length() == 4){
+
+                return dataArray[2]+"-"+dataArray[1]+"-"+dataArray[0];
+
+            }else if (dataArray[0].length() == 4 && dataArray[1].length() == 2 && dataArray[2].length() == 2){
+                return dataArray[0]+"-"+dataArray[1]+"-"+dataArray[2];
+            }
         }
         return "0000-00-00";
     }
