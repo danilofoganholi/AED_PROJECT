@@ -1,8 +1,20 @@
 3817, Action
 5388, Adventure
-3263, Science Fiction
+7869, Animation
 4823, Comedy
 7156, Crime
 3836, Documentary
 4986, Drama
+9814, Family
+5148, Fantasy
+4629, Foreign
+8528, History
+8586, Horror
+7553, Music
+351, Mystery
+2635, Romance
+3263, Science Fiction
+2867, TV Movie
+4881, Thriller
 6025, War
+5912, Western
