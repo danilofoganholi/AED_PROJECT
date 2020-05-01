@@ -10,7 +10,8 @@ public class TestMain {
         //testando o se a leitura do ficheiro movies esta  correta mesmo contendo id negativo
 
         //chamando função que le arquivo
-        HashMap<Integer,Movie> dicionarioMovies = Main.readFolder("deisi_movies.txt").dicionarioMovies;
+        Main.readFolder("deisi_movies.txt");
+        HashMap<Integer,Movie> dicionarioMovies = Main.dicionarioMovies;
 
         //teste primeiro objeto movie na primeira linha
         String errorMessage="Erro na leitura do ficheiro movie com id negativos";
@@ -22,7 +23,8 @@ public class TestMain {
         //testando o se a leitura do ficheiro movies esta correta mesmo contendo mais parametros
 
         //chamando função que le arquivo
-        HashMap<Integer,Movie> dicionarioMovies = Main.readFolder("deisi_movies.txt").dicionarioMovies;
+        Main.readFolder("deisi_movies.txt");
+        HashMap<Integer,Movie> dicionarioMovies = Main.dicionarioMovies;
 
         //teste primeiro objeto movie na primeira linha
         String errorMessage="Erro na leitura do ficheiro movie. Ainda esta lendo linhas com mais que 5 parametros";
