@@ -4,17 +4,15 @@ public class Actor {
     int idActor;
     String nome;
     char genero;
-    int idFilmes;
 
-    public Actor(int idActor, String nome, char genero, int idFilmes) {
+    public Actor(int idActor, String nome, char genero) {
         this.idActor = idActor;
         this.nome = nome;
-        this.genero = genero;
-        this.idFilmes = idFilmes;
+        this.genero = Character.toUpperCase(genero) ;
     }
 
     @Override
     public String toString() {
-        return  idActor+" | "+nome+" | " +genero+" | "+idFilmes;
+        return  idActor+" | "+nome+" | " +genero;
     }
 }
