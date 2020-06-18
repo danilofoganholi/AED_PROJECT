@@ -1,0 +1,8 @@
+3817, Action
+5388, Adventure
+3263, Science Fiction
+4823, Comedy
+7156, Crime
+3836, Documentary
+4986, Drama
+6025, War

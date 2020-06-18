@@ -1,39 +1,25 @@
 package pt.ulusofona.deisi.aedProj2020;
-import java.util.HashSet;
+import java.util.HashMap;
 
 public class Movie {
     int id;
     String titulo;
-    HashSet<Actor> actores=new HashSet<>();
-    HashSet<Realizador> realizadores=new HashSet<>();
-    HashSet<Genero> generos=new HashSet<>();
+    HashMap<Integer,Actor> actores=new HashMap<>();
+    HashMap<Integer,Director> directors =new HashMap<>();
+    HashMap<Integer,Genero> generos=new HashMap<>();
     String dataLancamento;
     int orcamento;
     float duracao;
     float mediaVotos;
-    int numeroVotos;
+    int numeroDeVotos;
 
-    public Movie(int id, String titulo, Actor actor, Realizador realizador, Genero genero, String data) {
+    public Movie(int id, String titulo, String dataLancamento, int orcamento, float duracao) {
+
         this.id = id;
         this.titulo = titulo;
-        this.actores.add(actor);
-        this.realizadores.add(realizador);
-        this.generos.add(genero);
-        this.dataLancamento = validaData(data)?data:"00-00-0000";
-    }
-
-    public Movie(int id, String titulo, Actor actor, Realizador realizador, Genero genero,
-                  String data, int orcamento,float duracao, float mediaVotos, int numeroVotos) {
-        this.id = id;
-        this.titulo = titulo;
-        this.actores.add(actor);
-        this.realizadores.add(realizador);
-        this.generos.add(genero);
-        this.dataLancamento = validaData(data)?data:"00-00-0000";
+        this.dataLancamento = validaData(dataLancamento)?arrumaData(dataLancamento):"0000-00-00";
         this.orcamento = orcamento;
-        this.duracao=duracao;
-        this.mediaVotos = mediaVotos;
-        this.numeroVotos = numeroVotos;
+        this.duracao = duracao;
     }
 
     public boolean validaData(String data){
@@ -58,8 +44,23 @@ public class Movie {
         return "0000-00-00";
     }
 
+    public int[] numerosActores(HashMap<Integer,Actor> actores){
+        int[] numerosActores= {0,0};
+
+        for (Actor actor:actores.values()){
+            if (actor.genero=='M'){
+                numerosActores[0]++;
+            }else if (actor.genero=='F'){
+                numerosActores[1]++;
+            }
+        }
+        return numerosActores;
+    }
+
     @Override
     public String toString() {
-        return  id +" | "+ titulo + " | " + arrumaData(dataLancamento);
+        int[] numerosActoresPorSexo = numerosActores(actores);
+        return  id +" | "+ titulo + " | " + dataLancamento + " | " + generos.size()
+                + " | " + directors.size() + " | " + numerosActoresPorSexo[0] + " | " + numerosActoresPorSexo[1];
     }
 }

@@ -11,6 +11,6 @@ public class Genero {
 
     @Override
     public String toString() {
-        return  idGenero+" = "+ nome;
+        return  nome;
     }
 }
