@@ -1,304 +1,87 @@
 package pt.ulusofona.deisi.aedProj2020;
-import java.io.*;
 import java.util.*;
 
 public class Main {
-    static int ignoredLineMovie, ignoredLineActors, ignoredLineDirectors;
-    static int ignoredLineGenres, ignoredLineGenresMovie, ignoredLineVotes;
+    //array que guarda as linhas ignoradas: (index-referencia)
+    //0-Movie  | 1-Actors  | 2-Directors  | 3-Genres  | 4-GenresMovie  | 5-Votes
+    static int[] ignoredLine = new int[6];
+
+    //dicionario para guardar os dados dos filmes em ordem
     static LinkedHashMap<Integer,Movie> dicionarioMovies = new LinkedHashMap<>();
-    static ArrayList<Actor> listActors = new ArrayList<>();
-    static ArrayList<Realizador> listDirectors = new ArrayList<>();
-    static HashMap<Integer,String> dicionarioGenres = new HashMap<>();
-    static HashMap<Integer, Integer> dicionarioGenresMovie = new HashMap<>();
-    static HashMap<Integer, Vote> dicionarioMovieVotes = new HashMap<>();
+
+    //dicionario para guardar qual genero corresponde a qual id
+    static HashMap<Integer,String> legendaGeneros = new HashMap<>();
 
     public static void parseFiles(){
         //inicializando variaveis que guardaram os retornos das leituras dos ficheiros
         dicionarioMovies = new LinkedHashMap<>();
-        listActors = new ArrayList<>();
-        listDirectors = new ArrayList<>();
-        dicionarioGenres = new HashMap<>();
-        dicionarioGenresMovie = new HashMap<>();
-        dicionarioMovieVotes = new HashMap<>();
+        ignoredLine = new int[6];
+        legendaGeneros = new HashMap<>();
 
-        //chamando funcoes que leem os ficheiros
-        readFolder("deisi_movies.txt");
-        readFolder("deisi_actors.txt");
-        readFolder("deisi_directors.txt");
-        readFolder("deisi_genres.txt");
-        readFolder("deisi_genres_movies.txt");
-        readFolder("deisi_movie_votes.txt");
-    }
+//        //chamando funcoes que leem os ficheiros
+//        long incio = System.currentTimeMillis();
+//        FunctionsParseFiles.readFolder("","deisi_movies.txt");
+//        long fim = System.currentTimeMillis();
+//        System.out.println("Movies = "+ (fim-incio));
+//
+//        incio = System.currentTimeMillis();
+//        FunctionsParseFiles.readFolder("","deisi_actors.txt");
+//        fim = System.currentTimeMillis();
+//        System.out.println("Actors = "+ (fim-incio));
+//
+//        incio = System.currentTimeMillis();
+//        FunctionsParseFiles.readFolder("","deisi_directors.txt");
+//        fim = System.currentTimeMillis();
+//        System.out.println("Directors = "+ (fim-incio));
+//
+//        incio = System.currentTimeMillis();
+//        FunctionsParseFiles.readFolder("","deisi_genres.txt");
+//        fim = System.currentTimeMillis();
+//        System.out.println("Genres = "+ (fim-incio));
+//
+//        incio = System.currentTimeMillis();
+//        FunctionsParseFiles.readFolder("","deisi_genres_movies.txt");
+//        fim = System.currentTimeMillis();
+//        System.out.println("GenresMovie = "+ (fim-incio));
+//
+//        incio = System.currentTimeMillis();
+//        FunctionsParseFiles.readFolder("","deisi_movie_votes.txt");
+//        fim = System.currentTimeMillis();
+//        System.out.println("Votes = "+ (fim-incio));
 
-    public static void readFolder(String nomeFicheiro) {
-        //reset variaveis que contam quantas linhas foram puladas em cada arquivo
-        switch (nomeFicheiro) {//verificando qual pasta foi passada
-            case "deisi_movies.txt":
-                ignoredLineMovie=0;
-                break;
-            case "deisi_actors.txt":
-                ignoredLineActors=0;
-                break;
-            case "deisi_directors.txt":
-                ignoredLineDirectors=0;
-                break;
-            case "deisi_genres_movies.txt":
-                ignoredLineGenresMovie=0;
-                break;
-            case "deisi_genres.txt":
-                ignoredLineGenres=0;
-                break;
-            case "deisi_movie_votes.txt":
-                ignoredLineVotes=0;
-                break;
-            default:
-                break;
-        }
-
-        try {
-            FileReader ficheiro = new FileReader(nomeFicheiro);//pegando ficheiro
-            BufferedReader leitorFicheiro = new BufferedReader(ficheiro);//colocando ficheiro no buffere
-            String lines;
-
-            while (((lines = leitorFicheiro.readLine()) != null)) {
-                String dadosLine[] = lines.split(",");// partir a linha no caractere separador
-                switch (nomeFicheiro) {//verificando qual pasta foi passada
-                    case "deisi_movies.txt":
-                        //verificando se a linha possui o numero de elementos correto
-                        if (dadosLine.length == 5) {
-                            //chamando função que coloca dados no containsFolder
-                            folderMovie(dadosLine);
-                        }else{ignoredLineMovie++;}
-                        break;
-                    case "deisi_actors.txt":
-                        //verificando se a linha possui o numero de elementos correto
-                        if (dadosLine.length == 4) {
-                            //chamando função que coloca dados no containsFolder
-                            folderActors(dadosLine);
-                        }else{ignoredLineActors++;}
-                        break;
-                    case "deisi_directors.txt":
-                        //verificando se a linha possui o numero de elementos correto
-                        if (dadosLine.length == 3) {
-                            //chamando função que coloca dados no containsFolder
-                            folderDirectors(dadosLine);
-                        }else{ignoredLineDirectors++;}
-                        break;
-                    case "deisi_genres_movies.txt":
-                        //verificando se a linha possui o numero de elementos correto
-                        if (dadosLine.length == 2) {
-                            //chamando função que coloca dados no containsFolder
-                            folderGenresMovies(dadosLine);
-                        }else{ignoredLineGenresMovie++;}
-                        break;
-                    case "deisi_genres.txt":
-                        //verificando se a linha possui o numero de elementos correto
-                        if (dadosLine.length == 2) {
-                            //chamando função que coloca dados no containsFolder
-                            folderGenres(dadosLine);
-                        }else{ignoredLineGenres++;}
-                        break;
-                    case "deisi_movie_votes.txt":
-                        //verificando se a linha possui o numero de elementos correto
-                        if (dadosLine.length == 2) {
-                            //chamando função que coloca dados no containsFolder
-                            folderVotes(dadosLine);
-                        }else{ignoredLineVotes++;}
-                        break;
-                    default:
-                        break;
-                }
-            }
-            leitorFicheiro.close();
-
-        }catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
-
-    public static void folderMovie(String dadosLine[]){
-        int idFilme,orcamento;
-        String titulo,data;
-        float duracao;
-        try {
-            //tentar passar as strings para inteiros se possivel
-            idFilme = Integer.parseInt(dadosLine[0].trim());
-
-            //verificando se já existe esse id
-            if (idFilme >= 0 && (!(dicionarioMovies.containsKey(idFilme)))) {
-
-                //tentando passar para float e int respectivamente
-                duracao = Float.parseFloat(dadosLine[2].trim());
-                orcamento = Integer.parseInt(dadosLine[3].trim());
-
-                //tirando os possíveis espaços no inicio e fim da string
-                titulo = dadosLine[1].trim();
-                data = dadosLine[4].trim();
-
-                //gravar os dados do filme no dicionario
-                dicionarioMovies.put(idFilme, new Movie(idFilme,
-                        titulo, null, null,null, data,
-                        orcamento, duracao, 0.0f, 0));
-            }
-        } catch (NumberFormatException ignored) {
-            idFilme = 0;
-        }//ignorar caso nao seja possivel
-    }
-
-    public static void folderActors(String dadosLine[]){
-        int idFilme,idActor;
-        String nome;
-        char genero;
-        try {
-            //tentar passar as strings para inteiros se possivel
-            idActor=Integer.parseInt(dadosLine[0].trim());
-            idFilme=Integer.parseInt(dadosLine[3].trim());
-
-            //tirando os possíveis espaços no inicio e fim da string
-            nome = dadosLine[1].trim();
-            genero = (dadosLine[2].trim()).charAt(0);
-
-            //gravar dados de actor no dicionario
-            listActors.add(new Actor(idActor,nome,genero,idFilme));
-
-        } catch (NumberFormatException ignored) {
-            idFilme = 0;
-        }//ignorar caso nao seja possivel
-    }
-
-    public static void folderDirectors(String dadosLine[]){
-        int idRealizador;
-        String nome;
-        try {
-            //tentar passar as strings para inteiros se possivel
-            idRealizador=Integer.parseInt(dadosLine[0].trim());
-
-            //tirando os possíveis espaços no inicio e fim da string
-            nome = dadosLine[1].trim();
-
-            //gravar dados de actor no dicionario
-            listDirectors.add(new Realizador(idRealizador,nome));
-
-        } catch (NumberFormatException ignored) {
-            idRealizador = 0;
-        }//ignorar caso nao seja possivel
-
-    }
-
-    public static void folderGenresMovies(String dadosLine[]){
-        int idFilme,idGenero;
-        try {
-            //tentar passar as strings para inteiros se possivel
-            idGenero=Integer.parseInt(dadosLine[0].trim());
-            idFilme=Integer.parseInt(dadosLine[1].trim());
-
-            //colocar dados no dicionario
-            dicionarioGenresMovie.put(idGenero,idFilme);
-
-        } catch (NumberFormatException ignored) {
-            idGenero = 0;
-        }//ignorar caso nao seja possivel
-    }
-
-    public static void folderGenres(String dadosLine[]){
-        int idGenero;
-        String nome;
-        try {
-            //tentar passar as strings para inteiros se possivel
-            idGenero=Integer.parseInt(dadosLine[0].trim());
-
-            //tirando os possíveis espaços no inicio e fim da string
-            nome = dadosLine[1].trim();
-
-            //colocar genero no dicionario de generos
-            dicionarioGenres.put(idGenero,nome);
-
-        } catch (NumberFormatException ignored) {
-            idGenero = 0;
-        }//ignorar caso nao seja possivel
-    }
-
-    public static void folderVotes(String dadosLine[]){
-        int idFilme,numeroDeVotos;
-        float mediaVotos;
-        try {
-            //tentar passar as strings para inteiros se possivel
-            idFilme=Integer.parseInt(dadosLine[0].trim());
-            mediaVotos=Float.parseFloat(dadosLine[1].trim());
-            numeroDeVotos=Integer.parseInt(dadosLine[2].trim());
-
-            //colocar ids no dicionario
-            dicionarioMovieVotes.put(idFilme,new Vote(mediaVotos,numeroDeVotos));
-
-        } catch (NumberFormatException ignored) {
-            idFilme = 0;
-        }//ignorar caso nao seja possivel
+        FunctionsParseFiles.readFolder("","deisi_movies.txt");
+        FunctionsParseFiles.readFolder("","deisi_actors.txt");
+        FunctionsParseFiles.readFolder("","deisi_directors.txt");
+        FunctionsParseFiles.readFolder("","deisi_genres.txt");
+        FunctionsParseFiles.readFolder("","deisi_genres_movies.txt");
+        FunctionsParseFiles.readFolder("","deisi_movie_votes.txt");
     }
 
     public static ArrayList<Movie> getMovies(){
-        //Inicializando valiaveis
-        ArrayList<Movie> listMovies = new ArrayList<>();
-
-        //passando dicionario para list
-        if (dicionarioMovies.size()>0){
-            listMovies.addAll(dicionarioMovies.values());
-        }else{
-            readFolder("deisi_movies.txt");
-            listMovies.addAll(dicionarioMovies.values());
-        }
-        return listMovies;//devolve lista com os filmes encontrados no ficheiro
+        parseFiles();
+        return new ArrayList<>(dicionarioMovies.values());//devolve lista com os filmes encontrados no ficheiro
     }
 
     public static int countIgnoredLines(String fileName){
         int countIgonedLines=0;
         switch (fileName) {//verificando qual pasta foi passada
             case "deisi_movies.txt":
-                if (ignoredLineMovie>0){
-                    countIgonedLines = ignoredLineMovie;
-                }else{
-                    readFolder("deisi_movies.txt");
-                    countIgonedLines = ignoredLineMovie;
-                }
+                countIgonedLines = ignoredLine[0];
                 break;
             case "deisi_actors.txt":
-                if (ignoredLineActors>0){
-                    countIgonedLines = ignoredLineActors;
-                }else{
-                    readFolder("deisi_actors.txt");
-                    countIgonedLines = ignoredLineActors;
-                }
+                countIgonedLines = ignoredLine[1];
                 break;
             case "deisi_directors.txt":
-                if (ignoredLineDirectors>0){
-                    countIgonedLines = ignoredLineDirectors;
-                }else{
-                    readFolder("deisi_directors.txt");
-                    countIgonedLines = ignoredLineDirectors;
-                }
+                countIgonedLines = ignoredLine[2]-1;
                 break;
             case "deisi_genres_movies.txt":
-                if (ignoredLineGenresMovie>0){
-                    countIgonedLines = ignoredLineGenresMovie;
-                }else{
-                    readFolder("deisi_genres_movies.txt");
-                    countIgonedLines = ignoredLineGenresMovie;
-                }
+                countIgonedLines = ignoredLine[4];
                 break;
             case "deisi_genres.txt":
-                if (ignoredLineGenres>0){
-                    countIgonedLines = ignoredLineGenres;
-                }else{
-                    readFolder("deisi_genres.txt");
-                    countIgonedLines = ignoredLineGenres;
-                }
+                countIgonedLines = ignoredLine[3];
                 break;
             case "deisi_movie_votes.txt":
-                if (ignoredLineVotes>0){
-                    countIgonedLines = ignoredLineVotes;
-                }else{
-                    readFolder("deisi_movie_votes.txt");
-                    countIgonedLines = ignoredLineVotes;
-                }
+                countIgonedLines = ignoredLine[5];
                 break;
             default:
                 break;
@@ -306,12 +89,85 @@ public class Main {
         return countIgonedLines;
     }
 
+    public static String askAmbrosio(String query){
+        String[] queryArray= query.split(" ");
+
+        switch (queryArray[0].toUpperCase()){
+            case "COUNT_MOVIES_MONTH_YEAR":
+                try{
+                    return Integer.toString(FunctionsQuery.countMoviesMonthYear(
+                            Integer.parseInt(queryArray[1].trim()),Integer.parseInt(queryArray[2].trim())));
+                }catch (NumberFormatException ignored){
+                    return "Invalid parameters. Try again.";
+                }
+            case "TOP_MONTH_MOVIE_COUNT":
+                try{
+                    return FunctionsQuery.topMonthMovieCount(Integer.parseInt(queryArray[1].trim()));
+                }catch (NumberFormatException ignored){
+                    return "Invalid parameters. Try again.";
+                }
+            case "GET_ACTORS_BY_DIRECTOR":
+                try{
+                    StringBuilder name = new StringBuilder();
+                    for (int i=2;i<queryArray.length;i++){
+                        name.append(queryArray[i]).append(" ");
+                    }
+                    return FunctionsQuery.getActorsByDirector(
+                            Integer.parseInt(queryArray[1].trim()),name.toString().trim());
+                }catch (NumberFormatException ignored){
+                    return "Invalid parameters. Try again.";
+                }
+            case "TOP_MOVIES_WITH_GENDER_BIAS":
+                try{
+                    return FunctionsQuery.topMoviesWithGenderBias(Integer.parseInt(queryArray[1].trim()),
+                            Integer.parseInt(queryArray[2].trim()));
+                }catch (NumberFormatException ignored){
+                    return "Invalid parameters. Try again.";
+                }
+            case "INSERT_DIRECTOR":
+                queryArray= query.split(";");
+                try{
+                    String[] idDirector = queryArray[0].split(" ");
+                    return FunctionsQuery.insertDirector(Integer.parseInt(idDirector[1]),
+                            queryArray[1],Integer.parseInt(queryArray[2].trim()));
+                }catch (NumberFormatException ignored){
+                    return "Invalid parameters. Try again.";
+                }
+            case "GET_MOVIES_WITH_ACTOR_CONTAINING":
+                return FunctionsQuery.getMovieWithActorContaining(queryArray[1]);
+            default:
+                return "Invalid query. Try again.";
+        }
+    }
+
+    public static String getVideoURL(){
+        return "";
+    }
+
     public static void main(String[] args) {
-        long incio = System.currentTimeMillis();
-        parseFiles();
+
+//        long inicio =System.currentTimeMillis();
         getMovies();
-        countIgnoredLines("deisi_movies.txt");
-        long fim = System.currentTimeMillis();
-        System.out.println(fim-incio);
+//        long fim = System.currentTimeMillis();
+//        System.out.println("(demorou " + (fim - inicio) + " ms)");
+
+//        Scanner in = new Scanner(System.in);
+//
+//        String line = in.nextLine();
+//
+//        while (line != null && !line.equals("QUIT")) {
+//
+//            long start = System.currentTimeMillis();
+//
+//            String result = askAmbrosio(line);
+//
+//            long end = System.currentTimeMillis();
+//
+//            System.out.println(result);
+//
+//            System.out.println("(demorou " + (end - start) + " ms)");
+//
+//            line = in.nextLine();
+//        }
     }
 }
