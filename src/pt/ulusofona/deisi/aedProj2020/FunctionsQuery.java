@@ -40,6 +40,7 @@ public class FunctionsQuery {
     }
 
     public static String getActorsByDirector(int numero,String nomeRealizador){
+
         HashMap<String,Node> countWorksDoneTogether= new HashMap<>();//conta os trabalhos feitos juntos
         StringBuilder resposta= new StringBuilder();//variavel para concatenar strings da resposta
 
@@ -72,6 +73,7 @@ public class FunctionsQuery {
     }
 
     public static String topMoviesWithGenderBias(int numero, int ano){
+
         ArrayList<Node> filmesDoAno = new ArrayList<>();//guarda o nome do filme/genero predominante/porcentagem
         StringBuilder resposta = new StringBuilder();//para concatenar resposta
 
@@ -115,6 +117,7 @@ public class FunctionsQuery {
     }
 
     public static String getMovieWithActorContaining(String subEstring){
+
         //guarda a lista com os nomes dos filmes que possuirem actores com uma substring no nome
         ArrayList<String> listNameMovie = new ArrayList<>();
         StringBuilder resposta = new StringBuilder();

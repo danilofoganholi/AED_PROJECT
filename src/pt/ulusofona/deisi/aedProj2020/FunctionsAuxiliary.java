@@ -7,6 +7,7 @@ public class FunctionsAuxiliary {
         if (!dadosLine[1].startsWith("\"")){//verificando se possui começa com aspas
             return dadosLine;
         }
+
         //concatenação e colocando a virgula novamente, pois como fiz o split na função askAmbrosio
         String[] stringCorrigida= {dadosLine[0],(dadosLine[1]+","+dadosLine[2]),dadosLine[3]};
 

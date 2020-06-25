@@ -53,6 +53,19 @@ public class Movie {
         return numerosActores;
     }
 
+    public int[] numerosActores(HashMap<Integer,Actor> actores){
+        int[] numerosActores= {0,0};
+
+        for (Actor actor:actores.values()){
+            if (actor.genero=='M'){
+                numerosActores[0]++;
+            }else if (actor.genero=='F'){
+                numerosActores[1]++;
+            }
+        }
+        return numerosActores;
+    }
+
     @Override
     public String toString() {
         int[] numerosActoresPorSexo = numerosActores(actores);

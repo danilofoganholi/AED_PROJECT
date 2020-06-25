@@ -1,5 +1,4 @@
 package pt.ulusofona.deisi.aedProj2020;
-
 import org.junit.Test;
 import java.io.IOException;
 import java.util.HashMap;
@@ -104,6 +103,7 @@ public class TestsMain {
         int resultadoEsperado = 1;
         assertEquals("Erro contar quantos filmes foram lançados em um certo mes-ano",
                 resultadoEsperado,resultadoReal);
+      
         FunctionsParseFiles.folder = "";
     }
 
@@ -127,6 +127,7 @@ public class TestsMain {
         String resultadoEsperado = "9:1";
         assertEquals("Erro procurar o mês com mais filmes em um certo ano",
                 resultadoEsperado,resultadoReal);
+
         FunctionsParseFiles.folder = "";
     }
 
@@ -194,10 +195,12 @@ public class TestsMain {
         FunctionsParseFiles.readFolderGenresMovies();
         FunctionsParseFiles.readFolderVotes();
 
+
         String resultadoReal = FunctionsQuery.insertDirector(1212, "Foganholi",3000);
         String resultadoEsperado = "OK";
         assertEquals("Erro ao procurar os atores que trabalharam pelo menos N vezes com o diretor X",
                 resultadoEsperado,resultadoReal);
+
         resultadoReal = Main.dicionarioMovies.get(3000).directors.get("Foganholi").nome;
         resultadoEsperado="Foganholi";
         assertEquals("Erro ao procurar o diretor inserido",resultadoEsperado,resultadoReal);
