@@ -13,6 +13,6 @@ public class Actor {
 
     @Override
     public String toString() {
-        return  idActor+" | "+nome+" | " +genero;
+        return  idActor+" | "+nome+" | " +genero+"\n";
     }
 }

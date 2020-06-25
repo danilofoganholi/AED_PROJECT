@@ -11,6 +11,6 @@ public class Director {
 
     @Override
     public String toString() {
-        return  idRealizador +" = "+nome;
+        return   nome+":"+idRealizador;
     }
 }

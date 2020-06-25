@@ -1,55 +1,52 @@
 package pt.ulusofona.deisi.aedProj2020;
-import java.util.HashSet;
+import java.util.ArrayList;
+import java.util.HashMap;
 
 public class Movie {
-    int id;
+    int id,diaLancamento,mesLancamento,anoLancamento,orcamento,numeroDeVotos;
     String titulo;
-    HashSet<Actor> actores=new HashSet<>();
-    HashSet<Director> directors =new HashSet<>();
-    HashSet<Genero> generos=new HashSet<>();
-    String dataLancamento;
-    int orcamento;
-    float duracao;
-    float mediaVotos;
-    int numeroDeVotos;
+    HashMap<Integer,Actor> actores=new HashMap<>();
+    HashMap<String,Director> directors =new HashMap<>();
+    HashMap<Integer,Genero> generos=new HashMap<>();
+    String dataString;
+    float duracao,mediaVotos;
 
     public Movie(int id, String titulo, String dataLancamento, int orcamento, float duracao) {
+        String[] dataArray = dataLancamento.split("-",3);
+        int[] data = arrumaData(dataArray);
         this.id = id;
         this.titulo = titulo;
-        this.dataLancamento = validaData(dataLancamento)?arrumaData(dataLancamento):"0000-00-00";
+        this.diaLancamento = data[0];
+        this.mesLancamento = data[1];
+        this.anoLancamento = data[2];
+        this.dataString = dataArray[2]+"-"+dataArray[1]+"-"+dataArray[0];
         this.orcamento = orcamento;
         this.duracao = duracao;
-    }
-
-    public boolean validaData(String data){
-        String[] dataArray = data.split("-",3);
-        return dataArray.length == 3 && (dataArray[0].length() == 2 &&
-                dataArray[1].length() == 2 && dataArray[2].length() == 4);
-    }
-
-    public String arrumaData(String data){
-
-        String[] dataArray = data.split("-",3);
-        if (dataArray.length == 3){
-
-            if (dataArray[0].length() == 2 && dataArray[1].length() == 2 && dataArray[2].length() == 4){
-
-                return dataArray[2]+"-"+dataArray[1]+"-"+dataArray[0];
-
-            }else if (dataArray[0].length() == 4 && dataArray[1].length() == 2 && dataArray[2].length() == 2){
-                return dataArray[0]+"-"+dataArray[1]+"-"+dataArray[2];
-            }
+        if (!Main.dicionarioAno.containsKey(data[2])){//coloca o id no ano correspondente
+            Main.dicionarioAno.put(data[2],new ArrayList<>());
         }
-        return "0000-00-00";
+        Main.dicionarioAno.get(data[2]).add(id);
     }
 
-    public int[] numerosActores(HashSet<Actor> actores){
+    public int[] arrumaData(String[] dataArray){
+        int[] data = new int[4];
+        if (dataArray.length == 3){
+            try {
+                data[0] = Integer.parseInt(dataArray[0]);
+                data[1] = Integer.parseInt(dataArray[1]);
+                data[2] = Integer.parseInt(dataArray[2]);
+            }catch (NumberFormatException ignored) {data[3]=1;}
+        }
+        return data;
+    }
+
+    public int[] numerosActores(HashMap<Integer,Actor> actores){
         int[] numerosActores= {0,0};
 
-        for (Actor actor:actores){
+        for (Actor actor:actores.values()){
             if (actor.genero=='M'){
                 numerosActores[0]++;
-            }else if (actor.genero=='F'){
+            }else{
                 numerosActores[1]++;
             }
         }
@@ -59,7 +56,7 @@ public class Movie {
     @Override
     public String toString() {
         int[] numerosActoresPorSexo = numerosActores(actores);
-        return  id +" | "+ titulo + " | " + dataLancamento + " | " + generos.size()
+        return  id +" | "+ titulo + " | " + dataString + " | " + generos.size()
                 + " | " + directors.size() + " | " + numerosActoresPorSexo[0] + " | " + numerosActoresPorSexo[1];
     }
 }
